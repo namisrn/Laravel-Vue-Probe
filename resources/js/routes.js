@@ -5,12 +5,13 @@ import EditFirma from "./components/EditFirma";
 import AllMitarbeiter from "./components/AllMitarbeiter";
 import CreateMitarbeiter from "./components/CreateMitarbeiter";
 import EditMitarbeiter from "./components/EditMitarbeiter";
+import Home from "./components/Home";
 
 export const routes = [
     {
         name: 'home',
-        path: '/alleFirmen',
-        component: AllFirmen
+        path: '/',
+        component: Home
     },
     {
         name: 'AllFirmen',

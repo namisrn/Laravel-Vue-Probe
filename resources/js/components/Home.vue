@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2 class="text-center">Firmen Liste</h2>
+        <h2 class="text-center">Home</h2>
 
         <table class="table">
             <thead>
@@ -14,13 +14,11 @@
             <tr v-for="firmen in firmens" :key="firmen.id">
                 <td>{{ firmen.id }}</td>
                 <td>{{ firmen.firmenname }}</td>
-                <td>
-                    <div class="btn-group" role="group">
-                        <router-link :to="{firmenname: 'edit', params: { id: firmen.id }}" class="btn btn-success">Edit</router-link>
-                        <button class="btn btn-success" @click="editFirma(firmen.id)">Delete</button>
-                        <button class="btn btn-danger" @click="deleteFirma(firmen.id)">Delete</button>
-                    </div>
-                </td>
+                    <tr v-for="mitarbeiter in mitarbeiters" :key="mitarbeiter.id">
+                        <td>{{ mitarbeiter.vorname }}</td>
+                        <td>{{ mitarbeiter.nachname }}</td>
+
+
             </tr>
             </tbody>
         </table>
@@ -50,7 +48,6 @@ export default {
                     this.firmens.splice(i, 1)
                 });
         }
-
     }
 }
 </script>
