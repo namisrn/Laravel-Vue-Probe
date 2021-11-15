@@ -17,7 +17,6 @@
                 <td>
                     <div class="btn-group" role="group">
                         <router-link :to="{firmenname: 'edit', params: { id: firmen.id }}" class="btn btn-success">Edit</router-link>
-                        <button class="btn btn-success" @click="editFirma(firmen.id)">Delete</button>
                         <button class="btn btn-danger" @click="deleteFirma(firmen.id)">Delete</button>
                     </div>
                 </td>

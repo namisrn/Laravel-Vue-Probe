@@ -2126,7 +2126,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -38728,19 +38727,6 @@ var render = function () {
                       },
                     },
                     [_vm._v("Edit")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-success",
-                      on: {
-                        click: function ($event) {
-                          return _vm.editFirma(firmen.id)
-                        },
-                      },
-                    },
-                    [_vm._v("Delete")]
                   ),
                   _vm._v(" "),
                   _c(
