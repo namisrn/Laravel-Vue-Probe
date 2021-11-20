@@ -7,18 +7,15 @@
             <tr>
                 <th>ID</th>
                 <th>Firma</th>
-                <!-- <th>Actions</th> -->
+                <th>Mitarbeitern</th>
+
             </tr>
             </thead>
             <tbody>
             <tr v-for="firmen in firmens" :key="firmen.id">
                 <td>{{ firmen.id }}</td>
                 <td>{{ firmen.firmenname }}</td>
-                    <tr v-for="mitarbeiter in mitarbeiters" :key="mitarbeiter.id">
-                        <td>{{ mitarbeiter.vorname }}</td>
-                        <td>{{ mitarbeiter.nachname }}</td>
-
-
+                <td> {{ firmen.mitarbeiten.map(mitarbeiter=> mitarbeiter.vorname ).join(", ") }}</td>
             </tr>
             </tbody>
         </table>
@@ -29,7 +26,8 @@
 export default {
     data() {
         return {
-            firmens: []
+            firmens: [],
+            mitarbeiters: []
         }
     },
     created() {
@@ -38,16 +36,7 @@ export default {
             .then(response => {
                 this.firmens = response.data;
             });
-    },
-    methods: {
-        deleteFirma(id) {
-            this.axios
-                .delete(`http://localhost:8000/api/firmens/${id}`)
-                .then(response => {
-                    let i = this.firmens.map(data => data.id).indexOf(id);
-                    this.firmens.splice(i, 1)
-                });
-        }
+
     }
 }
 </script>

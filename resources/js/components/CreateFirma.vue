@@ -27,7 +27,7 @@ export default {
             this.axios
                 .post('http://localhost:8000/api/firmens', this.firmen)
                 .then(response => (
-                    this.$router.push({ name: 'home' })
+                    this.$router.push({ name: 'AllFirmen' })
                 ))
                 .catch(err => console.log(err))
                 .finally(() => this.loading = false)

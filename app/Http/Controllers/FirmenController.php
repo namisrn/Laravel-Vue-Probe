@@ -2,13 +2,20 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Firmen;
+use App\Models\Mitarbeiter;
 
 class FirmenController extends Controller
 {
     public function index()
     {
-        $firmen = Firmen::all()->toArray();
-        return array_reverse($firmen);
+        $firmen = Firmen::orderBy("updated_at","desc")->get()->toArray();
+
+        $result = [];
+        foreach ($firmen as $firma){
+            $mitarbeiten = Mitarbeiter::where("firmen_id", $firma["id"])->get();
+            $result[] = array_merge($firma,["mitarbeiten" => $mitarbeiten]);
+        }
+        return response()->json($result);
     }
 
     public function store(Request $request)
@@ -18,7 +25,7 @@ class FirmenController extends Controller
         ]);
         $firmen->save();
 
-        return response()->json('Firma created :) ');
+        return response()->json($firmen);
     }
 
     public function show($id)
@@ -27,12 +34,12 @@ class FirmenController extends Controller
         return response()->json($firmen);
     }
 
-    public function update($id, Request $request)
+    public function update(Request $request, $id)
     {
         $firmen = Firmen::find($id);
         $firmen->update($request->all());
 
-        return response()->json('Firma edited!');
+        return response()->json($firmen);
     }
 
     public function destroy($id)
@@ -40,6 +47,8 @@ class FirmenController extends Controller
         $firmen = Firmen::find($id);
         $firmen->delete();
 
-        return response()->json('Firma ging PLeite :( !');
+        return response()->json([
+            id=>$id
+        ]);
     }
 }

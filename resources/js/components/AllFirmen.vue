@@ -1,6 +1,7 @@
 <template>
+
     <div>
-        <h2 class="text-center">Firmen Liste</h2>
+        <h2 class="text-center">Firmen Listen</h2>
 
         <table class="table">
             <thead>
@@ -16,7 +17,10 @@
                 <td>{{ firmen.firmenname }}</td>
                 <td>
                     <div class="btn-group" role="group">
-                        <router-link :to="{firmenname: 'edit', params: { id: firmen.id }}" class="btn btn-success">Edit</router-link>
+                        <router-link :to="{firmenname: 'edit', params: { id: firmens.id }}" class="btn btn-success">Edit</router-link>
+
+                        <button class="btn btn-secondary" @click="onEdit(firmen.id)">Edit(test)</button>
+
                         <button class="btn btn-danger" @click="deleteFirma(firmen.id)">Delete</button>
                     </div>
                 </td>
@@ -24,6 +28,8 @@
             </tbody>
         </table>
     </div>
+
+
 </template>
 
 <script>
@@ -48,7 +54,11 @@ export default {
                     let i = this.firmens.map(data => data.id).indexOf(id);
                     this.firmens.splice(i, 1)
                 });
+        },
+        onEdit(){
+            window.console.log("Hello" + this.firmen.id);
         }
+
 
     }
 }

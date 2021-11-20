@@ -13,14 +13,14 @@ class CreateMitarbeitersTable extends Migration
      */
     public function up()
     {
-        Schema::create('mitarbeiters', function (Blueprint $table) {
-            $table->id();
-            $table->string('firmen_id');
-            $table->string('vorname');
-            $table->string('nachname');
-            $table->string('email');
-            $table->timestamps();
-        });
+    Schema::create('mitarbeiters', function (Blueprint $table) {
+        $table->id();
+        $table->string('vorname');
+        $table->string('nachname');
+        $table->string('email'); //->unique()
+        $table->foreignId('firmen_id')->unsigned();  //->references('firmen_id')->on('firmas');
+        $table->timestamps();
+      });
     }
 
     /**

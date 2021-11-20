@@ -10,6 +10,11 @@ import Home from "./components/Home";
 export const routes = [
     {
         name: 'home',
+        path: '/home',
+        component: Home
+    },
+    {
+        name: 'home',
         path: '/',
         component: Home
     },

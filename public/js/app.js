@@ -2083,6 +2083,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
 
 /***/ }),
@@ -2098,6 +2099,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2150,6 +2157,9 @@ __webpack_require__.r(__webpack_exports__);
 
         _this2.firmens.splice(i, 1);
       });
+    },
+    onEdit: function onEdit() {
+      window.console.log("Hello" + this.firmen.id);
     }
   }
 });
@@ -2201,6 +2211,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2215,7 +2227,7 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
-    deleteFirma: function deleteFirma(id) {
+    deleteMitarbeiter: function deleteMitarbeiter(id) {
       var _this2 = this;
 
       this.axios["delete"]("http://localhost:8000/api/mitarbeiters/".concat(id)).then(function (response) {
@@ -2271,7 +2283,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.axios.post('http://localhost:8000/api/firmens', this.firmen).then(function (response) {
         return _this.$router.push({
-          name: 'home'
+          name: 'AllFirmen'
         });
       })["catch"](function (err) {
         return console.log(err);
@@ -2324,17 +2336,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      mitarbeiter: {}
+      mitarbeiter: {},
+      firmens: []
     };
   },
   methods: {
     addMitarbeiter: function addMitarbeiter() {
       var _this = this;
 
-      this.axios.post('http://localhost:8000/api/mitarbeiters', this.mitarbeiter).then(function (response) {
+      this.axios.post('http://localhost:8000/api/mitarbeiters', {}).then(function (response) {
         return _this.$router.push({
           name: 'AllMitarbeiter'
         });
@@ -2344,6 +2361,13 @@ __webpack_require__.r(__webpack_exports__);
         return _this.loading = false;
       });
     }
+  },
+  created: function created() {
+    var _this2 = this;
+
+    this.axios.get('http://localhost:8000/api/firmens/').then(function (response) {
+      _this2.firmens = response.data;
+    });
   }
 });
 
@@ -2508,13 +2532,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      firmens: []
+      firmens: [],
+      mitarbeiters: []
     };
   },
   created: function created() {
@@ -2523,19 +2545,6 @@ __webpack_require__.r(__webpack_exports__);
     this.axios.get('http://localhost:8000/api/firmens/').then(function (response) {
       _this.firmens = response.data;
     });
-  },
-  methods: {
-    deleteFirma: function deleteFirma(id) {
-      var _this2 = this;
-
-      this.axios["delete"]("http://localhost:8000/api/firmens/".concat(id)).then(function (response) {
-        var i = _this2.firmens.map(function (data) {
-          return data.id;
-        }).indexOf(id);
-
-        _this2.firmens.splice(i, 1);
-      });
-    }
   }
 });
 
@@ -2663,6 +2672,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var routes = [{
+  name: 'home',
+  path: '/home',
+  component: _components_Home__WEBPACK_IMPORTED_MODULE_6__["default"]
+}, {
   name: 'home',
   path: '/',
   component: _components_Home__WEBPACK_IMPORTED_MODULE_6__["default"]
@@ -38700,7 +38713,7 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h2", { staticClass: "text-center" }, [_vm._v("Firmen Liste")]),
+    _c("h2", { staticClass: "text-center" }, [_vm._v("Firmen Listen")]),
     _vm._v(" "),
     _c("table", { staticClass: "table" }, [
       _vm._m(0),
@@ -38723,10 +38736,26 @@ var render = function () {
                     {
                       staticClass: "btn btn-success",
                       attrs: {
-                        to: { firmenname: "edit", params: { id: firmen.id } },
+                        to: {
+                          firmenname: "edit",
+                          params: { id: _vm.firmens.id },
+                        },
                       },
                     },
                     [_vm._v("Edit")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-secondary",
+                      on: {
+                        click: function ($event) {
+                          return _vm.onEdit(firmen.id)
+                        },
+                      },
+                    },
+                    [_vm._v("Edit(test)")]
                   ),
                   _vm._v(" "),
                   _c(
@@ -38830,7 +38859,7 @@ var render = function () {
                       staticClass: "btn btn-danger",
                       on: {
                         click: function ($event) {
-                          return _vm.deleteFirma(mitarbeiter.id)
+                          return _vm.deleteMitarbeiter(mitarbeiter.id)
                         },
                       },
                     },
@@ -38970,128 +38999,114 @@ var render = function () {
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-6" }, [
-        _c(
-          "form",
-          {
-            on: {
-              submit: function ($event) {
-                $event.preventDefault()
-                return _vm.addMitarbeiter.apply(null, arguments)
+        _c("form", { ref: "form" }, [
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", [_vm._v("Vorname")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.mitarbeiter.vorname,
+                  expression: "mitarbeiter.vorname",
+                },
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text" },
+              domProps: { value: _vm.mitarbeiter.vorname },
+              on: {
+                input: function ($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.mitarbeiter, "vorname", $event.target.value)
+                },
               },
-            },
-          },
-          [
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", [_vm._v("Vorname")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.mitarbeiter.vorname,
-                    expression: "mitarbeiter.vorname",
-                  },
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.mitarbeiter.vorname },
-                on: {
-                  input: function ($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.mitarbeiter, "vorname", $event.target.value)
-                  },
-                },
-              }),
-            ]),
+            }),
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", [_vm._v("Nachname")]),
             _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", [_vm._v("Nachname")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.mitarbeiter.nachname,
-                    expression: "mitarbeiter.nachname",
-                  },
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.mitarbeiter.nachname },
-                on: {
-                  input: function ($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.mitarbeiter, "nachname", $event.target.value)
-                  },
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.mitarbeiter.nachname,
+                  expression: "mitarbeiter.nachname",
                 },
-              }),
-            ]),
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text" },
+              domProps: { value: _vm.mitarbeiter.nachname },
+              on: {
+                input: function ($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.mitarbeiter, "nachname", $event.target.value)
+                },
+              },
+            }),
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", [_vm._v("Email")]),
             _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", [_vm._v("Email")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.mitarbeiter.email,
-                    expression: "mitarbeiter.email",
-                  },
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.mitarbeiter.email },
-                on: {
-                  input: function ($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.mitarbeiter, "email", $event.target.value)
-                  },
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.mitarbeiter.email,
+                  expression: "mitarbeiter.email",
                 },
-              }),
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", [_vm._v("Firma ID")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.mitarbeiter.firmen_id,
-                    expression: "mitarbeiter.firmen_id",
-                  },
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.mitarbeiter.firmen_id },
-                on: {
-                  input: function ($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.mitarbeiter, "firmen_id", $event.target.value)
-                  },
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text" },
+              domProps: { value: _vm.mitarbeiter.email },
+              on: {
+                input: function ($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.mitarbeiter, "email", $event.target.value)
                 },
-              }),
-            ]),
+              },
+            }),
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", [_vm._v("Firma ID")]),
             _vm._v(" "),
             _c(
-              "button",
-              { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-              [_vm._v("Create")]
+              "select",
+              { staticClass: "form-control" },
+              _vm._l(_vm.firmens, function (option) {
+                return _c("option", { domProps: { value: option.id } }, [
+                  _vm._v(
+                    "\n                            " +
+                      _vm._s(option.firmenname) +
+                      "\n                        "
+                  ),
+                ])
+              }),
+              0
             ),
-          ]
-        ),
+          ]),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary",
+              attrs: { type: "submit" },
+              on: { click: _vm.addMitarbeiter },
+            },
+            [_vm._v("Create")]
+          ),
+        ]),
       ]),
     ]),
   ])
@@ -39357,23 +39372,27 @@ var render = function () {
       _vm._v(" "),
       _c(
         "tbody",
-        [
-          _vm._l(_vm.firmens, function (firmen) {
-            return _c("tr", { key: firmen.id }, [
-              _c("td", [_vm._v(_vm._s(firmen.id))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(firmen.firmenname))]),
-            ])
-          }),
-          _vm._l(_vm.mitarbeiters, function (mitarbeiter) {
-            return _c("tr", { key: mitarbeiter.id }, [
-              _c("td", [_vm._v(_vm._s(mitarbeiter.vorname))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(mitarbeiter.nachname))]),
-            ])
-          }),
-        ],
-        2
+        _vm._l(_vm.firmens, function (firmen) {
+          return _c("tr", { key: firmen.id }, [
+            _c("td", [_vm._v(_vm._s(firmen.id))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(firmen.firmenname))]),
+            _vm._v(" "),
+            _c("td", [
+              _vm._v(
+                " " +
+                  _vm._s(
+                    firmen.mitarbeiten
+                      .map(function (mitarbeiter) {
+                        return mitarbeiter.vorname
+                      })
+                      .join(", ")
+                  )
+              ),
+            ]),
+          ])
+        }),
+        0
       ),
     ]),
   ])
@@ -39388,6 +39407,8 @@ var staticRenderFns = [
         _c("th", [_vm._v("ID")]),
         _vm._v(" "),
         _c("th", [_vm._v("Firma")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Mitarbeitern")]),
       ]),
     ])
   },
